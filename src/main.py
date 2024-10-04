@@ -38,7 +38,8 @@ if process_url_clicked:
     loader = UnstructuredURLLoader(urls=urls)
     data = loader.load()
 
-    main_placeholder.text(data)
+    main_placeholder.text("Data Loading...Started...✅✅✅")
+    print(data)
     
     # Combine content from all loaded documents
     txt = "\n".join([doc.page_content for doc in data])
