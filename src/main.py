@@ -123,6 +123,6 @@ if query:
     st.write(result['result'])
     
     try:
-    os.remove('faiss_index.pkl')
+        os.remove('faiss_index.pkl')
     except:
         pass 
