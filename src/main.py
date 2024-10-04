@@ -11,6 +11,7 @@ from langchain.vectorstores import FAISS
 from langchain.schema import Document
 from langchain.embeddings import HuggingFaceEmbeddings
 import streamlit as st
+import time
 
 # Load environment variables
 from dotenv import load_dotenv
@@ -37,7 +38,7 @@ if process_url_clicked:
     loader = UnstructuredURLLoader(urls=urls)
     data = loader.load()
 
-    main_placeholder.text("Data Loading...Started...✅✅✅")
+    main_placeholder.text(data)
     
     # Combine content from all loaded documents
     txt = "\n".join([doc.page_content for doc in data])
