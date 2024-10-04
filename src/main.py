@@ -1,4 +1,3 @@
-from langchain_community.document_loaders import UnstructuredURLLoader
 from sentence_transformers import SentenceTransformer
 import faiss
 import numpy as np
@@ -11,7 +10,7 @@ from langchain.vectorstores import FAISS
 from langchain.schema import Document
 from langchain.embeddings import HuggingFaceEmbeddings
 import streamlit as st
-import time
+import PyPDF2
 
 # Load environment variables
 from dotenv import load_dotenv
@@ -20,29 +19,30 @@ load_dotenv()
 nltk.download('punkt')
 
 # Streamlit App Interface
-st.title("News Research Tool 📈")
-st.sidebar.title("News Article URLs")
+st.title("PDF Research Tool 📄")
+st.sidebar.title("Upload PDF Files")
 
 main_placeholder = st.empty()
 
-urls = []
-for i in range(2):
-    url = st.sidebar.text_input(f"URL {i+1}")
-    urls.append(url)
+pdf_files = st.sidebar.file_uploader("Choose PDF files", type="pdf", accept_multiple_files=True)
 
-process_url_clicked = st.sidebar.button("Process URLs")
+process_pdf_clicked = st.sidebar.button("Process PDFs")
 file_path = "faiss_index.pkl"
 
-if process_url_clicked:
-    # Step 1: Load data from the URLs
-    loader = UnstructuredURLLoader(urls=urls)
-    data = loader.load()
+if process_pdf_clicked and pdf_files:
+    # Step 1: Extract text from the uploaded PDFs
+    main_placeholder.text("Extracting text from PDFs...Started...✅✅✅")
+    pdf_texts = []
 
-    main_placeholder.text("Data Loading...Started...✅✅✅")
-    print(data)
-    
-    # Combine content from all loaded documents
-    txt = "\n".join([doc.page_content for doc in data])
+    for pdf_file in pdf_files:
+        reader = PyPDF2.PdfReader(pdf_file)
+        pdf_text = ""
+        for page_num in range(len(reader.pages)):
+            page = reader.pages[page_num]
+            pdf_text += page.extract_text()
+        pdf_texts.append(pdf_text)
+
+    txt = "\n".join(pdf_texts)
     
     # Step 2: Split the text into smaller chunks
     splitter = CharacterTextSplitter(
@@ -72,7 +72,7 @@ if process_url_clicked:
     main_placeholder.text("FAISS index created and saved...✅✅✅")
 
 # Querying the processed data
-query = main_placeholder.text_input("Ask a question about the articles:")
+query = main_placeholder.text_input("Ask a question about the PDF content:")
 
 if query:
     # Re-initialize the SentenceTransformer model before query
