@@ -121,8 +121,3 @@ if query:
     
     # Display the result in Streamlit
     st.write(result['result'])
-    
-    try:
-        os.remove('faiss_index.pkl')
-    except:
-        pass 
