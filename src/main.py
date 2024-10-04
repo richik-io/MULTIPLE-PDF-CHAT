@@ -11,16 +11,21 @@ from langchain.schema import Document
 from langchain.embeddings import HuggingFaceEmbeddings
 import streamlit as st
 import PyPDF2
+import os
 
 # Load environment variables
 from dotenv import load_dotenv
 load_dotenv()
 
 nltk.download('punkt')
-
+try:
+    os.remove('faiss_index.pkl')
 # Streamlit App Interface
+except:
+    pass 
 st.title("PDF Research Tool 📄")
 st.sidebar.title("Upload PDF Files")
+st.sidebar.header("PLEASE CLICK ON PROCESS PDF BUTTON!!")
 
 main_placeholder = st.empty()
 
