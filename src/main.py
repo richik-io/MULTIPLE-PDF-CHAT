@@ -15,7 +15,7 @@ import os
 
 # Load environment variables
 from dotenv import load_dotenv
-load_dotenv()
+GROQ = load_dotenv('GROQ-API-KEY')
 
 nltk.download('punkt')
 # Streamlit App Interface
@@ -82,7 +82,7 @@ if query:
     # Step 6: Initialize the ChatGroq LLM
     llm = ChatGroq(
         temperature=0.9,
-        groq_api_key="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",
+        groq_api_key=GROQ,
         model_name='llama-3.1-70b-versatile'
     )
 
